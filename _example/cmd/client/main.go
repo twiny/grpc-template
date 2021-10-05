@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"phonebook/cmd/client/api"
+	"phonebook/_example/cmd/client/api"
 )
 
 // main
