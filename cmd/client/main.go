@@ -1,7 +1,16 @@
-package mai
+package main
 
-import "fmt"
+import (
+	"fmt"
+	"phonebook/cmd/client/api"
+)
 
+// main
 func main() {
-	fmt.Println("hello from client")
+	cli := api.NewClientCLI()
+
+	if err := cli.Run(); err != nil {
+		fmt.Println(err)
+		return
+	}
 }
