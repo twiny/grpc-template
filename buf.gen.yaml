@@ -2,8 +2,8 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-  # go relative path to package `zrpc` is go mod name, /pkg where file will be stored
-    default: zrpc/pkg
+  # go relative path to package `phonebook` is go mod name, /pkg where file will be stored
+    default: phonebook/pkg
     except:
       - buf.build/googleapis/googleapis
 plugins:
