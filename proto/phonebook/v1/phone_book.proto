@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package phonebook.v1;
+
+// contact message
+message Contact {
+  string full_name = 1;
+  string email = 2;
+  string phone = 3;
+}
+
+// ContactGetRequest
+message ContactGetRequest { string full_name = 1; }
+
+// ContactGetResponse
+message ContactGetResponse { Contact contact = 1; }
+
+// ContactPutRequest
+message ContactPutRequest { Contact contact = 1; }
+
+// ContactPutResponse
+message ContactPutResponse {}
+
+// ContactDeleteRequest
+message ContactDeleteRequest { string full_name = 1; }
+
+// ContactDeleteResponse
+message ContactDeleteResponse {}
+
+// PhonebookStoreService
+service PhonebookStoreService {
+  rpc GetContact(ContactGetRequest) returns (ContactGetResponse) {}
+  rpc PutContact(ContactPutRequest) returns (ContactPutResponse) {}
+  rpc DeleteContact(ContactDeleteRequest) returns (ContactDeleteResponse) {}
+}
