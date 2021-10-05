@@ -2,34 +2,37 @@ syntax = "proto3";
 
 package phonebook.v1;
 
+import "google/type/datetime.proto";
+
 // contact message
 message Contact {
   string full_name = 1;
   string email = 2;
   string phone = 3;
+  google.type.DateTime created_at = 4;
 }
 
-// ContactGetRequest
-message ContactGetRequest { string full_name = 1; }
+// GetContactRequest
+message GetContactRequest { string full_name = 1; }
 
-// ContactGetResponse
-message ContactGetResponse { Contact contact = 1; }
+// GetContactResponse
+message GetContactResponse { Contact contact = 1; }
 
-// ContactPutRequest
-message ContactPutRequest { Contact contact = 1; }
+// PutContactRequest
+message PutContactRequest { Contact contact = 1; }
 
-// ContactPutResponse
-message ContactPutResponse {}
+// PutContactResponse
+message PutContactResponse {}
 
-// ContactDeleteRequest
-message ContactDeleteRequest { string full_name = 1; }
+// DeleteContactRequest
+message DeleteContactRequest { string full_name = 1; }
 
-// ContactDeleteResponse
-message ContactDeleteResponse {}
+// DeleteContactResponse
+message DeleteContactResponse {}
 
 // PhonebookStoreService
 service PhonebookStoreService {
-  rpc GetContact(ContactGetRequest) returns (ContactGetResponse) {}
-  rpc PutContact(ContactPutRequest) returns (ContactPutResponse) {}
-  rpc DeleteContact(ContactDeleteRequest) returns (ContactDeleteResponse) {}
+  rpc GetContact(GetContactRequest) returns (GetContactResponse) {}
+  rpc PutContact(PutContactRequest) returns (PutContactResponse) {}
+  rpc DeleteContact(DeleteContactRequest) returns (DeleteContactResponse) {}
 }
