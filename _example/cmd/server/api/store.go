@@ -7,6 +7,7 @@ import (
 	"phonebook/internal/utils"
 	phonebookv1 "phonebook/pkg/phonebook/v1"
 
+	"github.com/googleapis/go-type-adapters/adapters"
 	"go.etcd.io/bbolt"
 )
 
@@ -64,7 +65,7 @@ func (s *Store) GetContact(ctx context.Context, req *phonebookv1.GetContactReque
 		return nil, err
 	}
 
-	createdAt, err := utils.TimeToProtoDateTime(cc.CreatedAt)
+	createdAt, err := adapters.TimeToProtoDateTime(cc.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +85,7 @@ func (s *Store) PutContact(ctx context.Context, req *phonebookv1.PutContactReque
 	if err := s.db.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket([]byte("contacts"))
 
-		createdAt, err := utils.ProtoDateTimeToTime(req.Contact.CreatedAt)
+		createdAt, err := adapters.ProtoDateTimeToTime(req.Contact.CreatedAt)
 		if err != nil {
 			return err
 		}

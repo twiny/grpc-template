@@ -6,10 +6,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/googleapis/go-type-adapters/adapters"
 	"github.com/urfave/cli/v2"
 	"google.golang.org/grpc"
 
-	"phonebook/internal/utils"
 	phonebookv1 "phonebook/pkg/phonebook/v1"
 )
 
@@ -79,7 +79,7 @@ func commandGetContact() *cli.Command {
 				return err
 			}
 
-			createdAt, err := utils.ProtoDateTimeToTime(resp.Contact.CreatedAt)
+			createdAt, err := adapters.ProtoDateTimeToTime(resp.Contact.CreatedAt)
 			if err != nil {
 				return err
 			}
@@ -131,7 +131,7 @@ func commandPutContact() *cli.Command {
 
 			store := phonebookv1.NewPhonebookStoreServiceClient(conn)
 
-			createdAt, err := utils.TimeToProtoDateTime(time.Now())
+			createdAt, err := adapters.TimeToProtoDateTime(time.Now())
 			if err != nil {
 				return err
 			}
