@@ -30,9 +30,16 @@ message DeleteContactRequest { string full_name = 1; }
 // DeleteContactResponse
 message DeleteContactResponse {}
 
+// ListContactsRequest
+message ListContactsRequest {}
+
+// ListContactsResponse
+message ListContactsResponse { repeated Contact contacts = 1; }
+
 // PhonebookStoreService
 service PhonebookStoreService {
   rpc GetContact(GetContactRequest) returns (GetContactResponse) {}
   rpc PutContact(PutContactRequest) returns (PutContactResponse) {}
   rpc DeleteContact(DeleteContactRequest) returns (DeleteContactResponse) {}
+  rpc ListContact(ListContactsRequest) returns (ListContactsResponse) {}
 }
