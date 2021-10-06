@@ -40,6 +40,7 @@ func NewClientCLI() *ClientCLI {
 			commandGetContact(),
 			commandPutContact(),
 			commandDeleteContact(),
+			commandListContact(),
 		},
 	}
 	return &ClientCLI{
@@ -194,10 +195,45 @@ func commandDeleteContact() *cli.Command {
 	}
 }
 
-// // commandListContact
-// func commandListContact() *cli.Command {
-// 	return nil
-// }
+// commandListContact
+func commandListContact() *cli.Command {
+	return &cli.Command{
+		Name:  "ls",
+		Usage: "list all contacts",
+		Action: func(ctx *cli.Context) error {
+			ctxc, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+
+			conn, err := grpc.DialContext(ctxc, ctx.String("addr"), grpc.WithBlock(), grpc.WithInsecure())
+			if err != nil {
+				return err
+			}
+			defer conn.Close()
+
+			store := phonebookv1.NewPhonebookStoreServiceClient(conn)
+
+			resp, err := store.ListContacts(context.Background(), &phonebookv1.ListContactsRequest{})
+			if err != nil {
+				return err
+			}
+
+			for _, contact := range resp.Contacts {
+				createdAt, err := adapters.ProtoDateTimeToTime(contact.CreatedAt)
+				if err != nil {
+					return err
+				}
+				fmt.Println("=======================")
+				fmt.Println("Name:", contact.FullName)
+				fmt.Println("Email:", contact.Email)
+				fmt.Println("Phone:", contact.Phone)
+				fmt.Println("Create At:", createdAt.Format(time.ANSIC))
+				fmt.Println("=======================")
+			}
+
+			return nil
+		},
+	}
+}
 
 // Run
 func (cli *ClientCLI) Run() error {

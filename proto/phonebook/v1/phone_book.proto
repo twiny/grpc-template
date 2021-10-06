@@ -41,5 +41,5 @@ service PhonebookStoreService {
   rpc GetContact(GetContactRequest) returns (GetContactResponse) {}
   rpc PutContact(PutContactRequest) returns (PutContactResponse) {}
   rpc DeleteContact(DeleteContactRequest) returns (DeleteContactResponse) {}
-  rpc ListContact(ListContactsRequest) returns (ListContactsResponse) {}
+  rpc ListContacts(ListContactsRequest) returns (ListContactsResponse) {}
 }

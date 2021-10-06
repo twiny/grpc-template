@@ -21,6 +21,7 @@ type PhonebookStoreServiceClient interface {
 	GetContact(ctx context.Context, in *GetContactRequest, opts ...grpc.CallOption) (*GetContactResponse, error)
 	PutContact(ctx context.Context, in *PutContactRequest, opts ...grpc.CallOption) (*PutContactResponse, error)
 	DeleteContact(ctx context.Context, in *DeleteContactRequest, opts ...grpc.CallOption) (*DeleteContactResponse, error)
+	ListContacts(ctx context.Context, in *ListContactsRequest, opts ...grpc.CallOption) (*ListContactsResponse, error)
 }
 
 type phonebookStoreServiceClient struct {
@@ -58,6 +59,15 @@ func (c *phonebookStoreServiceClient) DeleteContact(ctx context.Context, in *Del
 	return out, nil
 }
 
+func (c *phonebookStoreServiceClient) ListContacts(ctx context.Context, in *ListContactsRequest, opts ...grpc.CallOption) (*ListContactsResponse, error) {
+	out := new(ListContactsResponse)
+	err := c.cc.Invoke(ctx, "/phonebook.v1.PhonebookStoreService/ListContacts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PhonebookStoreServiceServer is the server API for PhonebookStoreService service.
 // All implementations should embed UnimplementedPhonebookStoreServiceServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type PhonebookStoreServiceServer interface {
 	GetContact(context.Context, *GetContactRequest) (*GetContactResponse, error)
 	PutContact(context.Context, *PutContactRequest) (*PutContactResponse, error)
 	DeleteContact(context.Context, *DeleteContactRequest) (*DeleteContactResponse, error)
+	ListContacts(context.Context, *ListContactsRequest) (*ListContactsResponse, error)
 }
 
 // UnimplementedPhonebookStoreServiceServer should be embedded to have forward compatible implementations.
@@ -79,6 +90,9 @@ func (UnimplementedPhonebookStoreServiceServer) PutContact(context.Context, *Put
 }
 func (UnimplementedPhonebookStoreServiceServer) DeleteContact(context.Context, *DeleteContactRequest) (*DeleteContactResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteContact not implemented")
+}
+func (UnimplementedPhonebookStoreServiceServer) ListContacts(context.Context, *ListContactsRequest) (*ListContactsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListContacts not implemented")
 }
 
 // UnsafePhonebookStoreServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -146,6 +160,24 @@ func _PhonebookStoreService_DeleteContact_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PhonebookStoreService_ListContacts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListContactsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PhonebookStoreServiceServer).ListContacts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/phonebook.v1.PhonebookStoreService/ListContacts",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PhonebookStoreServiceServer).ListContacts(ctx, req.(*ListContactsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PhonebookStoreService_ServiceDesc is the grpc.ServiceDesc for PhonebookStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -164,6 +196,10 @@ var PhonebookStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteContact",
 			Handler:    _PhonebookStoreService_DeleteContact_Handler,
+		},
+		{
+			MethodName: "ListContacts",
+			Handler:    _PhonebookStoreService_ListContacts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

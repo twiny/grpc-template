@@ -16,3 +16,6 @@ run `make generate`
 
 ### delete contact
 `go run _example/cmd/client/main.go --addr "127.0.0.1:8813" delete --name "mike"`
+
+### list all contact
+`go run _example/cmd/client/main.go --addr "127.0.0.1:8813" -h`

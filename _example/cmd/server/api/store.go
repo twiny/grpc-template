@@ -121,6 +121,38 @@ func (s *Store) DeleteContact(ctx context.Context, req *phonebookv1.DeleteContac
 	return &phonebookv1.DeleteContactResponse{}, nil
 }
 
+// ListContacts
+func (s *Store) ListContacts(context.Context, *phonebookv1.ListContactsRequest) (*phonebookv1.ListContactsResponse, error) {
+	var contacts []*phonebookv1.Contact
+	if err := s.db.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket([]byte("contacts"))
+		return bucket.ForEach(func(k []byte, v []byte) error {
+			c, err := utils.Decode(v)
+			if err != nil {
+				return err
+			}
+
+			createdAt, err := adapters.TimeToProtoDateTime(c.CreatedAt)
+			if err != nil {
+				return err
+			}
+			contacts = append(contacts, &phonebookv1.Contact{
+				FullName:  c.FullName,
+				Email:     c.Email,
+				Phone:     c.Phone,
+				CreatedAt: createdAt,
+			})
+			return nil
+		})
+	}); err != nil {
+		return nil, err
+	}
+
+	return &phonebookv1.ListContactsResponse{
+		Contacts: contacts,
+	}, nil
+}
+
 // Close
 func (s *Store) Close() {
 	s.db.Close()
